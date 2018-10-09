@@ -1,9 +1,10 @@
 clear;
+t0=cputime;
 % sample CSI trace is a 90x1 vector where first 30 elements correspond to subcarriers for first rx antenna, second 30 correspond to CSI from next 30 subcarriers and so on.
 % replace sample_csi_trace with CSI from Intel 5300 converted to 90x1 vector
 sample_csi_traceTmp = load('sample_csi_trace');
 sample_csi_trace = sample_csi_traceTmp.sample_csi_trace;
-%方向矩阵X是sample_csi_trace
+%方向矩阵X是sample_csi_trace？
 fc = 5.63e9; % center frequency
 M = 3;    % number of rx antennas
 fs = 40e6; % channel bandwidth
@@ -54,8 +55,10 @@ sample_csi_trace_sanitized = relChannel_noSlope(:);
 % aoaEstimateMatrix is (nComps x 5) matrix where nComps is the number of paths in the environment.
 % First column is ToF in ns and second column is AoA in degrees as defined in SpotFi paper
 % aoaEstimateMatrix是（nComps x 5）矩阵，其中nComps是环境中的路径数。
-% 第一列是ns中的ToF，第二列是SpotFi纸张中定义的AoA度数
+% 第一列是ns为单位的ToF，第二列是SpotFi论文中定义的AoA度数
 aoaEstimateMatrix = backscatterEstimationMusic(sample_csi_trace_sanitized, M, N, c, fc,...
                     T, fgap, SubCarrInd, d, paramRange, maxRapIters, useNoise, do_second_iter, ones(2));   
 tofEstimate = aoaEstimateMatrix(:,1); % ToF in nanoseconds
+%Tof 以ns纳秒为单位
 aoaEstomate = aoaEstimateMatrix(:,2); % AoA in degrees
+t1=cputime-t0

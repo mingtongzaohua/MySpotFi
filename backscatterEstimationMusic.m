@@ -4,7 +4,7 @@ function [Parameters, varargout] = backscatterEstimationMusic(csi_trace, M, N, c
 
 % OUTPUTS:
 % Parameters : Each row of parameters contains [ToF(ns) AoA(degrees) displacement(mm)]
-
+%输入csi矩阵，输出矩阵Parameters[Tof,AoA,位移？]
 
 nComps = [];
 corrThr = 0.4; % correlation threshold to decide after how many components we decide to cutoff the MUSIC process
@@ -18,9 +18,12 @@ end
 %% MUSIC parameters
 % % % For AoA-ToF smoothing
 % K = floor(M/2)+1; % K is the number fo subset of antennas chosen for smoothing music. Default value is floor(M/2)+1
+% CSI smoothing中的天线子集数
 % L = floor(N/2); % L is the number fo subset of subcarriers chosen for smoothing music. Default value is floor(N/2)
+% CSI smoothing中的子载波子集数
 % % % For mobile localization 
 if ~isfield(paramRange,'K')
+    %K是paramRange中字段的名称
     K = floor(M/2)+1; 
     L = floor(N/2);
     T = floor(Ttot/2)+1;
@@ -33,6 +36,7 @@ end
 % do_second_iter = 0; % do two iterative gridding in MUSIC
 if ~isfield(paramRange,'delayRange')
     % % % % FIXED DELAY, DELTA RANGES USED IN PREVIOUS VERSION
+    %固定延迟
     delayRange = [-25 25]*1e-9; % [-25 70]
     deltaRange = [-c/2/fc  c/2/fc];
     angleRange = [-90 90];
